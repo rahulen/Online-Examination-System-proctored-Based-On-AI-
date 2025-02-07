@@ -1,0 +1,201 @@
+{% extends 'student/studentbase.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #4f46e5;
+            --accent-color: #f59e0b;
+        }
+
+        .exam-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .exam-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border: none;
+        }
+
+        .exam-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .rule-list {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        .rule-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .rule-list li::before {
+            content: "•";
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .webcam-container {
+            border: 3px solid var(--primary-color);
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #000;
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #vid {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .btn-primary-custom {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .badge-accent {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .warning-text {
+            color: #ef4444;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<div class="exam-container">
+    <div class="container">
+        <div class="exam-card p-4 mb-4">
+            <h2 class="text-center mb-4">📝 {{course.course_name}} Examination</h2>
+            
+            <div class="row g-4">
+                <!-- Exam Details Card -->
+                <div class="col-md-6">
+                    <div class="p-4 bg-light rounded-3">
+                        <h4 class="card-title mb-3">Exam Overview</h4>
+                        <div class="d-grid gap-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fas fa-book-open text-primary"></i>
+                                <div>
+                                    <h5 class="mb-0">Total Questions</h5>
+                                    <p class="mb-0">{{total_questions}}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fas fa-star text-primary"></i>
+                                <div>
+                                    <h5 class="mb-0">Total Marks</h5>
+                                    <p class="mb-0">{{total_marks}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rules Card -->
+                <div class="col-md-6">
+                    <div class="p-4 bg-light rounded-3">
+                        <h4 class="card-title mb-3">Examination Rules</h4>
+                        <ul class="rule-list">
+                            <li>All questions are multiple choice (MCQ)</li>
+                            <li class="warning-text">Only one correct answer per question</li>
+                            <li>Varying marks per question</li>
+                            <li>Answer promptly - timed assessment</li>
+                            <li>Random question order</li>
+                            <li>Immediate score feedback</li>
+                        </ul>
+                        <div class="badge-accent mt-3">
+                            <i class="fas fa-exclamation-triangle me-2"></i>No page refresh allowed
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Webcam Section -->
+            <div class="text-center mt-5">
+                <div class="webcam-container mb-4">
+                    <video id="vid"></video>
+                </div>
+
+                <button id="but" class="btn-primary-custom mb-3">
+                    <i class="fas fa-video me-2"></i>Enable Webcam
+                </button>
+
+                <div id="start_exam" class="mt-4" style="visibility: hidden;">
+                    <a href="{% url 'start-exam' course.id %}" class="btn-primary-custom btn-lg">
+                        <i class="fas fa-door-open me-2"></i>Start Exam Now
+                    </a>
+                    <div class="mt-3 fw-bold text-muted">
+                        <i class="fas fa-thumbs-up me-2"></i>Best of Luck!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Existing webcam script remains the same
+    document.addEventListener("DOMContentLoaded", () => {
+        var but = document.getElementById("but");
+        var video = document.getElementById("vid");
+        var start_exam = document.getElementById("start_exam");
+        var mediaDevices = navigator.mediaDevices;
+        vid.muted = true;
+        but.addEventListener("click", () => {
+            mediaDevices.getUserMedia({ video: true, audio: true })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    start_exam.style.visibility = "visible";
+                    video.addEventListener("loadedmetadata", () => video.play());
+                    but.disabled = true;
+                    but.innerHTML = '<i class="fas fa-check-circle me-2"></i>Webcam Active';
+                })
+                .catch(alert);
+        });
+    });
+</script>
+
+{% endblock content %}
