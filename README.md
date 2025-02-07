@@ -1,5 +1,7 @@
 # Online Examination System (Proctored Based on AI)
 
+![image alt](image https://github.com/rahulen/Online-Examination-System-proctored-Based-OnAI-/blob/cba19157c307fe355154a28c2f907605ec72e673/Screenshot%20%201.png)
+
 ## Installation Guide
 
 ### Step 1: Install Python 3.10
