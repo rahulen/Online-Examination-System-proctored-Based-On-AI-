@@ -28,6 +28,9 @@ To start the project, execute the following command:
 ```bash
 python manage.py runserver
 ```
+```bash
+python .\manage.py runserver              
+```
 
 This will start the Django development server. You can access the application at `http://127.0.0.1:8000/` in your browser.
 
