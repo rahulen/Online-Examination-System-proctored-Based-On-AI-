@@ -1,5 +1,6 @@
 # Online Examination System (Proctored Based on AI)
-![image alt](https://raw.githubusercontent.com/rahulen/Online-Examination-System-proctored-Based-OnAI-/main/screenshot_1.png)
+![image alt](https://raw.githubusercontent.com/rahulen/Online-Examination-System-proctored-Based-On-AI-/461671e8e47efbfa9543a6e9cbbc82fa9850fb9c/screenshot_1.png)
+
 
 
 
